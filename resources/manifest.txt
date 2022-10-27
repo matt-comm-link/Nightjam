@@ -1,0 +1,6 @@
+shader default
+shader ui
+mesh default
+mesh uisquare dynamic
+mesh player
+font courbd 64
