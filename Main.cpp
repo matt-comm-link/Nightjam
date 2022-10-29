@@ -10,7 +10,10 @@
 
 #include "mesh.h"
 
+#include "Environment.h"
+
 #include "Loader.h"
+#include "RenderHelpers.h"
 
 #ifndef uint
 #define uint unsigned int
@@ -106,8 +109,8 @@ int main(int argc, char* argv[])
 		//}
 		//Draw Battle
 		//Draw Conversation
-		DrawText("'The quick brown fox jumped over the lazy dog' - confucious.", "courbd", glm::vec3(0, 0, 0), glm::vec3(1, 1, 1), glm::vec4(1, 1, 1, 1));
-
+		DrawText("'The quick brown fox jumped over the lazy dog' - confucious.", "courbd", glm::vec3(0, 0, 0), glm::vec3(0.2f, 0.5f, 1), glm::vec4(1, 1, 1, 1));
+		DrawText(("x = " + to_string(InputMousePos.x) + ", y = " + to_string(InputMousePos.y)), "courbd", glm::vec3(14, 440, 0), glm::vec3(0.3f, 0.3f, 1), glm::vec4(1, 0, 0, 1));
 		//Choose to draw characters based on the above
 
 		//buffer swap
@@ -127,10 +130,50 @@ int main(int argc, char* argv[])
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
 	glViewport(0, 0, width, height);
+	Wwidth = width;
+	Wheight = height;
+
 }
 
 void processInput (GLFWwindow* window)
 {
-	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-		glfwSetWindowShouldClose(window, true);
+	InputLastMouse0 = InputMouse0;
+	InputLastMouse1 = InputMouse1;
+	InputLastESC = InputESC;
+	InputLastSpace = InputSpace;
+	
+	InputMouse0 = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS;
+	InputMouse1 = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS;
+	InputESC = glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS;
+	InputSpace == glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS;
+
+	InputWASD = glm::vec2(0, 0);
+	//In order of the initialisation even though it's a mess readability wise in programming
+	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+	{
+		InputWASD.y += 1;
+	}	
+	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+	{
+		InputWASD.x -= 1;
+	}	
+	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+	{
+		InputWASD.y -= 1;
+	}
+	if(glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+	{
+		InputWASD.x += 1;
+	}
+	glm::dvec2 mposinput;
+	glfwGetCursorPos(window, &mposinput.x, &mposinput.y);
+
+	InputLastMousePos = InputMousePos;
+	InputMousePos = glm::vec2(mposinput.x, Wheight - mposinput.y);
+	InputMouseCentred = glm::vec2(InputMousePos.x - (Wwidth / 2), InputMousePos.y - (Wheight / 2));
+
+
+
+
 }
+

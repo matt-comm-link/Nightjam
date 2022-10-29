@@ -374,19 +374,37 @@ struct Bounds
 	//extents, most in given direction
 	glm::vec3 centre;
 	float modelRot = 0;
-	float left, right, down, up;
-	uint type; //passable, solid, trigger solid, trigger passable, walk trap
+	float width, height;
+	float left, right, up, down;
+	string type; //passable, solid, trigger solid, trigger passable, walk trap
 	string model; //model and texture data
 	string shader; //shader stripped from model
 	string action; //interpreted. Load new scene, load dialog scene, load battle, with note as to whether to overwrite player position
 
-	Bounds(glm::vec3 c, float l, float r, float d, float u, uint t, string m, string s, string a)
+	Bounds(glm::vec3 c, float w, float h, string t, string m, string s, string a)
 	{
 		centre = c;
+		width = w;
+		height = h;
+		left = centre.x - width/2;
+		right = centre.x + width / 2;
+		up = centre.y + height / 2;
+		down = centre.y - height / 2;
+		type = t;
+		model = m;
+		shader = s;
+		action = a;
+	}
+
+	Bounds(float l, float r, float u, float d, string t, string m, string s, string a)
+	{
+		width = abs(r) - abs(l);
+		height = abs(u) - abs(d);
 		left = l;
 		right = r;
-		down = d;
 		up = u;
+		down = d;
+		centre = glm::vec3((l + r) / 2, 0, (u + d) / 2);
 		type = t;
 		model = m;
 		shader = s;
@@ -395,15 +413,14 @@ struct Bounds
 	Bounds()
 	{
 		centre = glm::vec3(0, 0, 0);
-		left = -1;
-		right = 1;
-		down = -1;
-		up = 1;
-		type = 0;
+		width = 2;
+		height = 2;
+		type = "";
 		model = "default";
 		shader = "default";
 		action = "none";
 	}
+
 
 };
 

@@ -141,8 +141,12 @@
     <ClCompile Include="GameConstructs.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ControlWalk.h" />
+    <ClInclude Include="Convoterp.h" />
+    <ClInclude Include="Environment.h" />
     <ClInclude Include="Loader.h" />
     <ClInclude Include="mesh.h" />
+    <ClInclude Include="RenderHelpers.h" />
     <ClInclude Include="shader.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="stringtools.h" />

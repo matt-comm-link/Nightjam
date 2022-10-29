@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Environment.h"
 #include "mesh.h"
 #include <iostream>
 #include <fstream>
@@ -24,85 +25,9 @@
 #include FT_FREETYPE_H    
 #endif // !FTBUILD
 
-string ApplicationPath;
-
-//These are vectors of all loaded assets
-//Loaded Graphics Assets 
-
-
-vector<string> shaderNames;
-vector<shader> shaders;
-
-vector<string> meshname;
-vector<Mesh> meshes;
-
-vector<string> texname;
-vector<Texture> textures;
 
 FT_Library ft;
-vector<string> fontnames;
 vector<FT_Face> faces;
-vector<map<char, Character>> fonts;
-shader FontShader;
-Mesh FontMesh;
-glm::mat4 UIOrtho;
-
-//Loaded game assets
-
-vector<string> effectNames;
-vector<EffectData> effects;
-
-vector<string> weaponNames;
-vector<WeaponData> weapons;
-
-vector<string> defenceNames;
-vector<DefenceData> defences;
-
-vector<string> enemyNames;
-vector<EnemyData> enemies;
-
-vector<string> sceneNames;
-vector<SceneData> scenes;
-
-vector<string> battleNames;
-vector<BattleData> battles;
-
-vector<string> conversationNames;
-vector<vector<string>> conversations;
-
-//SCENE SCREEN
-SceneData CurrentScene;
-PlayerData CurrentSave;
-
-//BATTLE SCREEN
-bool inBattle = false;
-vector<EnemyData> currentFoes;
-//what effect is in play
-string currentEffect[4]; //knight, ranger, wizard, you
-//how long the effect has left
-uint currentEffectTurns[4]; //knight, ranger, wizard, you
-//current health (doesn't carry over between fights)
-int healthBars[4];	//knight, ranger, wizard, you
-//dice available still this round, reset to dice in playerdata at the end.
-int diceleft;
-
-//CONVERSATION SCREEN
-bool inConversation = false;
-vector<string> ConversationScript;
-uint ConversationPlace;
-
-//CONSTANTS
-//How far til bump
-float playerCollisionRadius = 0.5f;
-glm::vec3 campos;
-glm::mat4 globalView;
-
-glm::mat4 globalProjection;
-
-float deltaTime;
-static int Wwidth, Wheight;
-
-
 
 
 int LoadTexture(string path)
@@ -324,147 +249,19 @@ vector<string> LoadManifest()
 
 
 
-//return true if new keyword is added
-bool AddKeyword(string kword)
-{
-	bool retBol = true;
-	for (int i = 0; i < CurrentSave.tagsAmassed.size(); i++)
-	{
-		if (kword == CurrentSave.tagsAmassed[i])
-			retBol = false;
-	}
-	if (retBol)
-		CurrentSave.tagsAmassed.push_back(kword);
-	return retBol;
-}
-
-//return true if keyword is already in list
-bool CheckKeyword(string kword)
-{
-	for (int i = 0; i < CurrentSave.tagsAmassed.size(); i++)
-	{
-		if (kword == CurrentSave.tagsAmassed[i])
-			return true;
-	}
-	return false;
-}
-
-
-Mesh& GetMesh(string n)
-{
-	int index = 0;
-	for (uint i = 0; i < meshname.size(); i++)
-	{
-		if (meshname[i] == n)
-		{
-			index = i;
-			break;
-		}
-	}
-	//returns default if not present
-	return meshes[index];
-
-}
-
-shader& GetShader(string n)
-{
-	int index = 0;
-	for (uint i = 0; i < shaderNames.size(); i++)
-	{
-		if (shaderNames[i] == n)
-		{
-			index = i;
-			break;
-		}
-	}
-	//returns default if not present
-	return shaders[index];
-
-}
-
-map<char, Character>& GetFont(string n)
-{
-	int index = 0;
-	for (uint i = 0; i < fontnames.size(); i++)
-	{
-		if (fontnames[i] == n)
-		{
-			index = i;
-			break;
-		}
-	}
-	//returns default if not present
-	return fonts[index];
-
-}
-
-void DrawMesh(Bounds b)
-{
-	int index = 0;
-	for (uint i = 0; i < meshname.size(); i++)
-	{
-		if (meshname[i] == b.model)
-		{
-			index = i;
-			break;
-		}
-	}
-	int sindex = 0;
-	for (uint i = 0; i < shaderNames.size(); i++)
-	{
-		if (shaderNames[i] == b.shader)
-		{
-			sindex = i;
-			break;
-		}
-	}
-	//returns default if not present
-	meshes[index].Draw(shaders[sindex], b.centre, b.modelRot, globalProjection, globalView);
-
-}
-
-void DrawMesh(EnemyData e, glm::vec3 p)
-{
-	int index = 0;
-	for (uint i = 0; i < meshname.size(); i++)
-	{
-		if (meshname[i] == e.name)
-		{
-			index = i;
-			break;
-		}
-	}
-	int sindex = 0;
-	for (uint i = 0; i < shaderNames.size(); i++)
-	{
-		if (shaderNames[i] == e.shader)
-		{
-			sindex = i;
-			break;
-		}
-	}
-	//returns default if not present
-	meshes[index].Draw(shaders[sindex], p, glm::half_pi<float>(), globalProjection, globalView);
-
-}
-
-void DrawText(string text, string font, glm::vec3 loc, glm::vec3 scale, glm::vec4 color)
-{
-	FontMesh.DrawFont(text, GetFont(font), FontShader, UIOrtho, globalView, loc, scale, color);
-}
 
 
 
-void DrawBattle()
-{
-}
+
+
+
 
 Bounds LoadBounds(string input)
 {
 	vector<string> lrud = split(input, ' ');
-	if (lrud.size() < 11)
+	if (lrud.size() < 9)
 		return Bounds();
-	return Bounds(glm::vec3(std::stof(lrud[0]), std::stof(lrud[1]), std::stof(lrud[2])), std::stof(lrud[3]), std::stof(lrud[4]), std::stof(lrud[5]), std::stof(lrud[6]), std::stoi(lrud[7]), lrud[8], lrud[9], lrud[10]);
+	return Bounds(glm::vec3(std::stof(lrud[0]), std::stof(lrud[1]), std::stof(lrud[2])), std::stof(lrud[3]), std::stof(lrud[4]), lrud[5], lrud[6], lrud[7], lrud[8]);
 
 }
 
