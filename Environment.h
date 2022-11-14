@@ -6,9 +6,7 @@
 #include <vector>
 #include <map>
 
-
 #include "GameConstructs.h"
-
 
 
 string ApplicationPath;
@@ -37,6 +35,25 @@ glm::mat4 globalView;
 
 glm::mat4 globalProjection;
 glm::mat4 UIOrtho;
+glm::mat4 gameOrtho;
+glm::mat4 postOrtho;
+
+
+static float TwidthR = 4;
+static float TheightR = 3;
+static int Twidth = 640;
+static int Theight = 480;
+//window height and width
+static int Wwidth, Wheight;
+//render height and width of game window
+float Rheight, RWidth;
+//scalar between window width and height and target ratio width and height
+float wRatio = 1;
+float hRatio = 1;
+//Scalar used for UI positioning
+float UIRatio = 1;
+glm::vec2 MPosOffset;
+
 
 //Loaded game assets
 
@@ -90,14 +107,19 @@ float playerSpeed;
 bool MovementInputLocked;
 bool MovementPhysicsLocked;
 
+
 float deltaTime;
-static int Wwidth, Wheight;
+
 
 //INPUT STATE
 glm::vec2 InputWASD;
 glm::vec2 InputLastMousePos;
 glm::vec2 InputMousePos;
 glm::vec2 InputMouseCentred;
+glm::vec2 InputMousePosRatioed;
+glm::vec2 InputMousePosRatioedCentred;
+
+
 bool InputLastMouse0;
 bool InputLastMouse1;
 bool InputLastESC;
@@ -108,51 +130,8 @@ bool InputMouse1;
 bool InputESC;
 bool InputSpace;
 
+Mesh& GetMesh(string n);
 
-Mesh& GetMesh(string n)
-{
-	int index = 0;
-	for (uint i = 0; i < meshname.size(); i++)
-	{
-		if (meshname[i] == n)
-		{
-			index = i;
-			break;
-		}
-	}
-	//returns default if not present
-	return meshes[index];
+shader& GetShader(string n);
 
-}
-
-shader& GetShader(string n)
-{
-	int index = 0;
-	for (uint i = 0; i < shaderNames.size(); i++)
-	{
-		if (shaderNames[i] == n)
-		{
-			index = i;
-			break;
-		}
-	}
-	//returns default if not present
-	return shaders[index];
-
-}
-
-map<char, Character>& GetFont(string n)
-{
-	int index = 0;
-	for (uint i = 0; i < fontnames.size(); i++)
-	{
-		if (fontnames[i] == n)
-		{
-			index = i;
-			break;
-		}
-	}
-	//returns default if not present
-	return fonts[index];
-
-}
+map<char, Character>& GetFont(string n);

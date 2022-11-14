@@ -11,6 +11,8 @@
 #include "mesh.h"
 
 #include "Environment.h"
+#include "framebuffering.h"
+
 
 #include "Loader.h"
 #include "RenderHelpers.h"
@@ -22,8 +24,11 @@
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window);
 
+//Framebuffers for rendering the game in original aspect ratio, as well as one for post processing effects if needed.
 
 
+FrameBuffer gameBuffer;
+FrameBuffer postBuffer;
 
 
 
@@ -43,8 +48,8 @@ int main(int argc, char* argv[])
 	std::cout << AppPath << std::endl;
 	//ApplicationPath = AppPath;
 
-	Wwidth = 640;
-	Wheight = 480;
+	Wwidth = Twidth;
+	Wheight = Theight;
 
 
 	GLFWwindow* window = glfwCreateWindow(Wwidth, Wheight, "NightJam", NULL, NULL);
@@ -80,6 +85,9 @@ int main(int argc, char* argv[])
 	//GAME INITIALISATION
 	SetupGame(AppPath);
 	
+	gameBuffer = FrameBuffer(RWidth, Rheight, GL_POINT, GetMesh("uisquare"));
+	postBuffer = FrameBuffer(Wwidth, Wheight, GL_POINT, GetMesh("uisquare"));
+
 	double lastTime = 0;
 
 	//RENDER LOOP
@@ -133,6 +141,27 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 	Wwidth = width;
 	Wheight = height;
 
+	wRatio = Wwidth / Twidth;
+	hRatio = Wheight / Theight;
+
+	//Wider than expected
+	if(wRatio > hRatio)
+	{
+		UIRatio = hRatio;
+		Rheight = height;
+		RWidth = wRatio * height / hRatio;
+		MPosOffset = glm::vec2((Wwidth - RWidth) / 2, 0);
+	}
+	else //Taller than expected
+	{
+		UIRatio = wRatio;
+		RWidth = width;
+		Rheight = hRatio * width / wRatio;
+		MPosOffset = glm::vec2(0, (Wheight - Rheight) / 2);
+	}
+	gameBuffer = FrameBuffer(RWidth, Rheight, GL_POINT, GetMesh("uisquare"));
+	postBuffer = FrameBuffer(Wwidth, Wheight, GL_LINEAR, GetMesh("uisquare"));
+
 }
 
 void processInput (GLFWwindow* window)
@@ -167,10 +196,12 @@ void processInput (GLFWwindow* window)
 	}
 	glm::dvec2 mposinput;
 	glfwGetCursorPos(window, &mposinput.x, &mposinput.y);
+	mposinput -= MPosOffset;
 
 	InputLastMousePos = InputMousePos;
 	InputMousePos = glm::vec2(mposinput.x, Wheight - mposinput.y);
 	InputMouseCentred = glm::vec2(InputMousePos.x - (Wwidth / 2), InputMousePos.y - (Wheight / 2));
+
 
 
 
