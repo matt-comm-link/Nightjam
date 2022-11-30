@@ -136,6 +136,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\glad(1)\src\glad.c" />
+    <ClCompile Include="Environment.cpp" />
+    <ClCompile Include="framebuffering.cpp" />
     <ClCompile Include="Loader.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="GameConstructs.h" />
@@ -144,6 +146,7 @@
     <ClInclude Include="ControlWalk.h" />
     <ClInclude Include="Convoterp.h" />
     <ClInclude Include="Environment.h" />
+    <ClInclude Include="framebuffering.h" />
     <ClInclude Include="Loader.h" />
     <ClInclude Include="mesh.h" />
     <ClInclude Include="RenderHelpers.h" />

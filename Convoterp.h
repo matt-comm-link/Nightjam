@@ -6,25 +6,25 @@
 //List of functions that interpret convoscript instructions to display a conversation
 
 //return true if new keyword is added
-bool AddKeyword(string kword)
+bool AddKeyword(Environment &environment, string kword)
 {
 	bool retBol = true;
-	for (int i = 0; i < CurrentSave.tagsAmassed.size(); i++)
+	for (int i = 0; i < environment.CurrentSave.tagsAmassed.size(); i++)
 	{
-		if (kword == CurrentSave.tagsAmassed[i])
+		if (kword == environment.CurrentSave.tagsAmassed[i])
 			retBol = false;
 	}
 	if (retBol)
-		CurrentSave.tagsAmassed.push_back(kword);
+		environment.CurrentSave.tagsAmassed.push_back(kword);
 	return retBol;
 }
 
 //return true if keyword is already in list
-bool CheckKeyword(string kword)
+bool CheckKeyword(Environment& environment, string kword)
 {
-	for (int i = 0; i < CurrentSave.tagsAmassed.size(); i++)
+	for (int i = 0; i < environment.CurrentSave.tagsAmassed.size(); i++)
 	{
-		if (kword == CurrentSave.tagsAmassed[i])
+		if (kword == environment.CurrentSave.tagsAmassed[i])
 			return true;
 	}
 	return false;

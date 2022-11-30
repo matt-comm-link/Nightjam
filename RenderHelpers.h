@@ -2,62 +2,38 @@
 
 #include "Environment.h"
 
-void DrawMesh(Bounds b)
+void DrawMesh(Environment &environment, Bounds b)
 {
-	int index = 0;
-	for (uint i = 0; i < meshname.size(); i++)
-	{
-		if (meshname[i] == b.model)
-		{
-			index = i;
-			break;
-		}
-	}
-	int sindex = 0;
-	for (uint i = 0; i < shaderNames.size(); i++)
-	{
-		if (shaderNames[i] == b.shader)
-		{
-			sindex = i;
-			break;
-		}
-	}
 	//returns default if not present
-	meshes[index].Draw(shaders[sindex], b.centre, b.modelRot, globalProjection, globalView);
+	environment.GetMesh(b.model).Draw(environment.GetShader(b.shader), b.centre, b.modelRot, environment.globalProjection, environment.globalView);
 
 }
 
-void DrawMesh(EnemyData e, glm::vec3 p)
+void DrawMesh(Environment &environment, EnemyData e, glm::vec3 p)
 {
-	int index = 0;
-	for (uint i = 0; i < meshname.size(); i++)
-	{
-		if (meshname[i] == e.name)
-		{
-			index = i;
-			break;
-		}
-	}
-	int sindex = 0;
-	for (uint i = 0; i < shaderNames.size(); i++)
-	{
-		if (shaderNames[i] == e.shader)
-		{
-			sindex = i;
-			break;
-		}
-	}
+
 	//returns default if not present
-	meshes[index].Draw(shaders[sindex], p, glm::half_pi<float>(), globalProjection, globalView);
+	environment.GetMesh(e.model).Draw(environment.GetShader(e.shader), p, glm::half_pi<float>(), environment.globalProjection, environment.globalView);
 
 }
 
-void DrawText(string text, string font, glm::vec3 loc, glm::vec3 scale, glm::vec4 color)
+void DrawText(Environment &environment, string text, string font, glm::vec3 loc, glm::vec3 scale, glm::vec4 color)
 {
-	FontMesh.DrawFont(text, GetFont(font), FontShader, UIOrtho, globalView, loc, scale, color);
+	environment.FontMesh.DrawFont(text, environment.GetFont(font), environment.FontShader, environment.UIOrtho, environment.globalView, loc, scale, color);
 }
 
 
+void DrawFB(Environment& environment, FrameBuffer buffer, string shader)
+{
+	glViewport(0, 0, environment.Wwidth, environment.Wheight);
+	buffer.mesh.DrawFB(environment.GetShader(shader), environment.wRatioAdjust, environment.hRatioAdjust, environment.gameOrtho, environment.postView, buffer.id, 0, buffer.texID);
+}
+
+void DrawFB(Environment& environment, FrameBuffer& buffer, string shader, FrameBuffer& targetbuffer)
+{
+	glViewport(0, 0, targetbuffer.Width, targetbuffer.Height);
+	buffer.mesh.DrawFB(environment.GetShader(shader), environment.wRatioAdjust, environment.hRatioAdjust, environment.gameOrtho, environment.postView, buffer.id, targetbuffer.id, buffer.texID);
+}
 
 void DrawBattle()
 {

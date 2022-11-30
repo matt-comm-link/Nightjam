@@ -79,14 +79,21 @@ struct Texture
 	unsigned int id;
 	string type;
 	string path;
+	unsigned char* storedData;
+	int swidth, sheight, schan;
 
 	Texture()
 	{
 		id = -1;
 	}
 
-	Texture(unsigned char* data, int width, int height, int nrChannels)
+	Texture(string name, unsigned char* data, int width, int height, int nrChannels)
 	{
+		path = name;
+		storedData = data;
+		swidth = width;
+		sheight = height;
+		schan = nrChannels;
 		glGenTextures(1, &id);
 		glBindTexture(GL_TEXTURE_2D, id);
 
@@ -104,7 +111,23 @@ struct Texture
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 
-	Texture(FT_Face &face)
+	Texture(string name, int width, int height, GLenum scalemode)
+	{
+		glGenTextures(1, &id);
+		glBindTexture(GL_TEXTURE_2D, id);
+
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, scalemode);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, scalemode);
+
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+		glGenerateMipmap(GL_TEXTURE_2D);
+		glBindTexture(GL_TEXTURE_2D, 0);
+	}
+
+	Texture(string name, FT_Face &face)
 	{
 		glGenTextures(1, &id);
 		glBindTexture(GL_TEXTURE_2D, id);
@@ -115,6 +138,11 @@ struct Texture
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, face->glyph->bitmap.width, face->glyph->bitmap.rows, 0, GL_RED, GL_UNSIGNED_BYTE, face->glyph->bitmap.buffer);
+	}
+
+	Texture(int exid)
+	{
+		id = exid;
 	}
 };
 
@@ -203,6 +231,7 @@ public:
 		texture = t;
 		MapPosition = glm::vec4(right, left, up, down);
 	}
+
 
 	void Draw(shader& shader, glm::vec3 loc, float mr, glm::mat4 &projection, glm::mat4 &view)
 	{
@@ -297,6 +326,40 @@ public:
 		glActiveTexture(GL_TEXTURE0);
 		glBindVertexArray(0);
 		glBindTexture(GL_TEXTURE_2D, 0);
+
+	}
+
+	//safely draw framebuffer and clean up after
+	void DrawFB(shader& shader, float wRatio, float hRatio, glm::mat4& projection, glm::mat4& view, int buffer, int target, uint tID)
+	{
+		shader.use();
+		glBindFramebuffer(GL_FRAMEBUFFER, target);
+		glClearColor(0, 0, 0, 1);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glDisable(GL_DEPTH_TEST);
+		glActiveTexture(GL_TEXTURE1);
+		glUniformMatrix4fv(shader.projection, 1, GL_FALSE, &projection[0][0]);
+		glUniformMatrix4fv(shader.view, 1, GL_FALSE, &view[0][0]);
+
+		glm::mat4 mMat = glm::mat4(1.0f);
+		mMat = glm::scale(mMat, glm::vec3(2/wRatio, 2/hRatio, 1));
+		mMat = glm::translate(mMat, glm::vec3(-0.5, -0.5, 0));
+		glUniformMatrix4fv(shader.model, 1, GL_FALSE, &mMat[0][0]);
+
+		//std::cout <<"drawing framebuffer " << buffer << " to " << target << std::endl;
+		std::cout << "ratio " << wRatio << " " << hRatio << std::endl;
+
+		glBindVertexArray(VAO);
+		glUniform1i(glGetUniformLocation(shader.ID, "buffer"), 1);
+		glBindTexture(GL_TEXTURE_2D, tID);
+
+
+		glDrawElements(GL_TRIANGLES, static_cast<uint>(indices.size()), GL_UNSIGNED_INT, 0);
+		glBindVertexArray(0);
+		glActiveTexture(GL_TEXTURE0); 
+		glEnable(GL_DEPTH_TEST);
+		glBindTexture(GL_TEXTURE_2D, 0);
+
 
 	}
 
