@@ -1,9 +1,17 @@
 #pragma once
 
+#ifndef DEFLOADERCPP
+
+#define DEFLOADERCPP "LOADERCPP"
+
+
 
 #include "loader.h"
 #include "Environment.h"
+
+#ifndef DEFCONSTRUCTCPP
 #include "stringtools.h"
+#endif // !stringfunc
 
 #ifndef STB_IMAGE_IMPLEMENTATION
 #define STB_IMAGE_IMPLEMENTATION
@@ -476,3 +484,4 @@ bool SetupGame(std::string path, Environment &environment)
 	return true;
 }
 
+#endif // !DEFLOADERCPP

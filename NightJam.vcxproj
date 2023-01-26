@@ -150,6 +150,7 @@
     <ClCompile Include="Loader.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="GameConstructs.h" />
+    <ClCompile Include="stringtools.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ControlWalk.h" />

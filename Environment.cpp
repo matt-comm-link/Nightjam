@@ -1,3 +1,8 @@
+#pragma once
+
+#ifndef DEFENVIRONCPP
+
+#define DEFENVIRONCPP "ENVIRONCPP";
 #include "Environment.h"
 
 
@@ -109,3 +114,4 @@ std::map<char, Character>& Environment::GetFont(std::string n)
 	return fonts[index];
 
 }
+#endif // !DEFENVIRONCPP

@@ -1,5 +1,11 @@
+#pragma once
+#ifndef DEFCONSTRUCTCPP
+
+#define DEFCONSTRUCTCPP "CONSTRUCTCPP"
 #include "GameConstructs.h"
+#ifndef DEFLOADERCPP
 #include "stringtools.h"
+#endif
 
 
 void GameConstruct::Unpack(std::string data)
@@ -1269,3 +1275,6 @@ void PlayerData::Unpack(std::string data)
 
 
 }
+
+
+#endif // !DEFCONSTRUCTCPP

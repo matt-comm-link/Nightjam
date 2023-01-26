@@ -1,3 +1,7 @@
+#pragma once
+#ifndef FRAMEBUFFERINGCPP
+#define FRAMEBUFFERINGCPP "BUFFERCPP"
+
 #include "framebuffering.h"
 
 FrameBuffer::FrameBuffer(int width, int height, GLenum scaleMode, Mesh &square)
@@ -83,3 +87,4 @@ void FrameBuffer::Use()
 	glViewport(0, 0, Width, Height);
 
 }
+#endif // !FRAMEBUFFERINGCPP
