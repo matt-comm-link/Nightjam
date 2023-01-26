@@ -1,6 +1,11 @@
 #pragma once
 #include "mesh.h"
 
+#ifndef FRAMEBUFFERDEF
+
+#define FRAMEBUFFERDEF "FRAMEBUFFER"
+
+
 class FrameBuffer
 {
 public:
@@ -19,3 +24,4 @@ public:
 	void Use();
 };
 
+#endif // !FRAMEBUFFERDEF

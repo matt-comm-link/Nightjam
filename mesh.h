@@ -1,5 +1,12 @@
 #pragma once
 
+
+#ifndef DefMesh
+
+#define DefMesh "MESH"
+
+
+
 #include <glad/glad.h>
 #include <glm.hpp>
 #include <gtc/matrix_transform.hpp>
@@ -17,7 +24,6 @@
 #include "shader.h"
 #include <map>
 
-using namespace std;
 
 #ifndef MAX_BONE_INFLUENCE
 #define MAX_BONE_INFLUENCE 4
@@ -77,8 +83,8 @@ struct Vertex
 struct Texture
 {
 	unsigned int id;
-	string type;
-	string path;
+	std::string type;
+	std::string path;
 	unsigned char* storedData;
 	int swidth, sheight, schan;
 
@@ -87,7 +93,7 @@ struct Texture
 		id = -1;
 	}
 
-	Texture(string name, unsigned char* data, int width, int height, int nrChannels)
+	Texture(std::string name, unsigned char* data, int width, int height, int nrChannels)
 	{
 		path = name;
 		storedData = data;
@@ -104,14 +110,14 @@ struct Texture
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 		if (!data)
-			std::cout << "whoopsie" << std::endl;
+			std::cout << "whoopsie" << '\n';
 
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
 		glGenerateMipmap(GL_TEXTURE_2D);
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 
-	Texture(string name, int width, int height, GLenum scalemode)
+	Texture(std::string name, int width, int height, GLenum scalemode)
 	{
 		glGenTextures(1, &id);
 		glBindTexture(GL_TEXTURE_2D, id);
@@ -127,7 +133,7 @@ struct Texture
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 
-	Texture(string name, FT_Face &face)
+	Texture(std::string name, FT_Face &face)
 	{
 		glGenTextures(1, &id);
 		glBindTexture(GL_TEXTURE_2D, id);
@@ -178,12 +184,12 @@ private:
 	uint VBO, EBO;
 
 public:
-	vector<Vertex> vertices;
-	vector<uint> indices;
+	std::vector<Vertex> vertices;
+	std::vector<uint> indices;
 	Texture texture;
 
 	//use default if not available
-	string PreferredShader;
+	std::string PreferredShader;
 
 	GLenum usage = GL_STATIC_DRAW;
 	uint VAO;
@@ -195,7 +201,7 @@ public:
 	bool built = false;
 
 
-	Mesh(vector<Vertex> verts, vector<uint> inds, Texture &tex )
+	Mesh(std::vector<Vertex> verts, std::vector<uint> inds, Texture &tex )
 	{
 		vertices = verts;
 		indices = inds;
@@ -204,7 +210,7 @@ public:
 		BuildMesh();
 	}
 
-	Mesh(vector<Vertex> verts, vector<uint> inds, Texture& tex, GLenum usa)
+	Mesh(std::vector<Vertex> verts, std::vector<uint> inds, Texture& tex, GLenum usa)
 	{
 		vertices = verts;
 		indices = inds;
@@ -238,7 +244,7 @@ public:
 		if (unusable)
 			return;
 		shader.use();
-		//std::cout << loc.x << " " << loc.y << " " << loc.z << std::endl;
+		//std::cout << loc.x << " " << loc.y << " " << loc.z << '\n';
 
 		glUniformMatrix4fv(shader.projection, 1, GL_FALSE, &projection[0][0]);
 		glUniformMatrix4fv(shader.view, 1, GL_FALSE, &view[0][0]);
@@ -278,12 +284,12 @@ public:
 
 
 
-	void DrawFont(string text, map<char, Character>& font, shader& shader, glm::mat4 &projection, glm::mat4& view, glm::vec3 loc, glm::vec3 scale, glm::vec4 color)
+	void DrawFont(std::string text, std::map<char, Character>& font, shader& shader, glm::mat4 &projection, glm::mat4& view, glm::vec3 loc, glm::vec3 scale, glm::vec4 color)
 	{
 		if (unusable || texture.id == -1 || usage == GL_STATIC_DRAW)
 			return;
 		shader.use();
-		//std::cout << loc.x << " " << loc.y << " " << loc.z << std::endl;
+		//std::cout << loc.x << " " << loc.y << " " << loc.z << '\n';
 
 		glUniformMatrix4fv(shader.projection, 1, GL_FALSE, &projection[0][0]);
 		glUniformMatrix4fv(shader.view, 1, GL_FALSE, &view[0][0]);
@@ -295,7 +301,7 @@ public:
 
 
 
-		string::const_iterator c;
+		std::string::const_iterator c;
 
 		for (c = text.begin(); c != text.end(); c++)
 		{
@@ -346,8 +352,8 @@ public:
 		mMat = glm::translate(mMat, glm::vec3(-0.5, -0.5, 0));
 		glUniformMatrix4fv(shader.model, 1, GL_FALSE, &mMat[0][0]);
 
-		//std::cout <<"drawing framebuffer " << buffer << " to " << target << std::endl;
-		std::cout << "ratio " << wRatio << " " << hRatio << std::endl;
+		//std::cout <<"drawing framebuffer " << buffer << " to " << target << '\n';
+		std::cout << "ratio " << wRatio << " " << hRatio << '\n';
 
 		glBindVertexArray(VAO);
 		glUniform1i(glGetUniformLocation(shader.ID, "buffer"), 1);
@@ -410,3 +416,5 @@ private:
 		built = true;
 	}
 };
+
+#endif // !DefMesh

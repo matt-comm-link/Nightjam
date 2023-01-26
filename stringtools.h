@@ -1,12 +1,15 @@
 #pragma once
 
+
+#ifndef stringfunc
 #include <string>
 #include <vector>
 #include <iterator>
+#include <iostream>
+#include <sstream>
 
-#ifndef stringfunc
 
-#define stringfunc
+#define stringfunc "STRINGTOOLS"
 //thanks Evan Teran on stack exchange
 template <typename Out>
 void split(const std::string& s, char delim, Out result) {

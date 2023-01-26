@@ -1,4 +1,9 @@
 #pragma once
+
+#ifndef DEFSHADER
+#define DEFSHADER "SHADER"
+
+
 #include <glad/glad.h>
 
 #include <string>
@@ -42,7 +47,7 @@ public:
 		} 
 		catch(std::ifstream:: failure& e)
 		{
-			std::cout << "Shader file fucked my dude" << std::endl;
+			std::cout << "Shader file fucked my dude" << '\n';
 		}
 
 		const char* vShaderCode = vertCode.c_str();
@@ -97,7 +102,7 @@ private:
 			if (!success)
 			{
 				glGetShaderInfoLog(shader, 1024, NULL, infoLog);
-				std::cout << "ERROR::SHADER_COMPILATION_ERROR of type: " << type << "\n" << infoLog << "\n -- --------------------------------------------------- -- " << std::endl;
+				std::cout << "ERROR::SHADER_COMPILATION_ERROR of type: " << type << "\n" << infoLog << "\n -- --------------------------------------------------- -- " << '\n';
 			}
 		}
 		else
@@ -106,8 +111,10 @@ private:
 			if (!success)
 			{
 				glGetProgramInfoLog(shader, 1024, NULL, infoLog);
-				std::cout << "ERROR::PROGRAM_LINKING_ERROR of type: " << type << "\n" << infoLog << "\n -- --------------------------------------------------- -- " << std::endl;
+				std::cout << "ERROR::PROGRAM_LINKING_ERROR of type: " << type << "\n" << infoLog << "\n -- --------------------------------------------------- -- " << '\n';
 			}
 		}
 	}
 };
+
+#endif // !DEFSHADER

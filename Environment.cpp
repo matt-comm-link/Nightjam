@@ -3,7 +3,7 @@
 
 
 
-Texture& Environment::GetTexture(string n)
+Texture& Environment::GetTexture(std::string n)
 {
 	int index = 0;
 	for (uint i = 0; i < texname.size(); i++)
@@ -20,7 +20,7 @@ Texture& Environment::GetTexture(string n)
 
 }
 
-Texture& Environment::GetTextureInstance(string n)
+Texture& Environment::GetTextureInstance(std::string n)
 {
 	int index = 0;
 	for (uint i = 0; i < texname.size(); i++)
@@ -41,7 +41,7 @@ Texture& Environment::GetTextureInstance(string n)
 }
 
 
-Mesh& Environment::GetMesh(string n)
+Mesh& Environment::GetMesh(std::string n)
 {
 	int index = 0;
 	for (uint i = 0; i < meshname.size(); i++)
@@ -58,7 +58,7 @@ Mesh& Environment::GetMesh(string n)
 
 }
 
-Mesh& Environment::GetMeshInstance(string n)
+Mesh& Environment::GetMeshInstance(std::string n)
 {
 	int index = 0;
 	for (uint i = 0; i < meshname.size(); i++)
@@ -78,7 +78,7 @@ Mesh& Environment::GetMeshInstance(string n)
 
 }
 
-shader& Environment::GetShader(string n)
+shader& Environment::GetShader(std::string n)
 {
 	int index = 0;
 	for (uint i = 0; i < shaderNames.size(); i++)
@@ -94,7 +94,7 @@ shader& Environment::GetShader(string n)
 
 }
 
-map<char, Character>& Environment::GetFont(string n)
+std::map<char, Character>& Environment::GetFont(std::string n)
 {
 	int index = 0;
 	for (uint i = 0; i < fontnames.size(); i++)

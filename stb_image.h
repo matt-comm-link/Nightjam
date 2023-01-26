@@ -173,9 +173,9 @@ RECENT REVISION HISTORY:
 // If image loading fails for any reason, the return value will be NULL,
 // and *x, *y, *channels_in_file will be unchanged. The function
 // stbi_failure_reason() can be queried for an extremely brief, end-user
-// unfriendly explanation of why the load failed. Define STBI_NO_FAILURE_STRINGS
+// unfri'\n'y explanation of why the load failed. Define STBI_NO_FAILURE_STRINGS
 // to avoid compiling these strings at all, and STBI_FAILURE_USERMSG to get slightly
-// more user-friendly ones.
+// more user-fri'\n'y ones.
 //
 // Paletted PNG, BMP, GIF, and PIC images are automatically depalettized.
 //
@@ -6139,7 +6139,7 @@ static void *stbi__psd_load(stbi__context *s, int *x, int *y, int *comp, int req
       //     If n is between 0 and 127 inclusive, copy the next n+1 bytes literally.
       //     Else if n is between -127 and -1 inclusive, copy the next byte -n+1 times.
       //     Else if n is 128, noop.
-      // Endloop
+      // '\n'oop
 
       // The RLE-compressed data is preceded by a 2-byte data count for each row in the data,
       // which we're going to just skip.
@@ -7768,7 +7768,7 @@ STBIDEF int stbi_is_16_bit_from_callbacks(stbi_io_callbacks const *c, void *user
       1.34  (unknown)
               use STBI_NOTUSED in stbi__resample_row_generic(), fix one more leak in tga failure case
       1.33  (2011-07-14)
-              make stbi_is_hdr work in STBI_NO_HDR (as specified), minor compiler-friendly improvements
+              make stbi_is_hdr work in STBI_NO_HDR (as specified), minor compiler-fri'\n'y improvements
       1.32  (2011-07-13)
               support for "info" function for all supported filetypes (SpartanJ)
       1.31  (2011-06-20)

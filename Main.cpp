@@ -40,12 +40,12 @@ int main(int argc, char* argv[])
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-	std::cout << argv[0] << std::endl;
+	std::cout << argv[0] << '\n';
 
 	std::string  AppPath = { std::filesystem::current_path().string() };
 	AppPath.erase(remove(AppPath.begin(), AppPath.end(), '\"'), AppPath.end());
 	AppPath += "\\resources\\";
-	std::cout << AppPath << std::endl;
+	std::cout << AppPath << '\n';
 	//ApplicationPath = AppPath;
 
 	environment.Wwidth = environment.Twidth;
@@ -56,7 +56,7 @@ int main(int argc, char* argv[])
 
 	if(window == NULL)
 	{
-		std::cout << "Failed to create GLFW window" << std::endl;
+		std::cout << "Failed to create GLFW window" << '\n';
 		glfwTerminate();
 		return -1;
 	}
@@ -64,7 +64,7 @@ int main(int argc, char* argv[])
 
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 	{
-		std::cout << "Failed to initialize GLAD" << std::endl;
+		std::cout << "Failed to initialize GLAD" << '\n';
 		return -1;
 	}
 
@@ -116,7 +116,7 @@ int main(int argc, char* argv[])
 		//Draw Scene 
 		DrawMesh(environment, environment.CurrentScene.limits);
 		environment.CurrentScene.limits.modelRot += environment.deltaTime;
-		//std::cout << CurrentScene.limits.modelRot << std::endl;
+		//std::cout << CurrentScene.limits.modelRot << '\n';
 		//for (uint i = 0; i < CurrentScene.Objects.size(); i++)
 		//{
 		//	DrawBounds(CurrentScene.Objects[i]);
@@ -126,7 +126,7 @@ int main(int argc, char* argv[])
 		
 		//Draw Conversation;
 		DrawText(environment, "'The quick brown fox jumped over the lazy dog' - confucious.", "CascadiaCode", glm::vec3(0, 0, 0), glm::vec3(0.2f, 0.5f, 1), glm::vec4(1, 1, 1, 1));
-		DrawText(environment, ("x = " + to_string(environment.InputMousePos.x) + ", y = " + to_string(environment.InputMousePos.y)), "CascadiaCode", glm::vec3(14, 440, 0), glm::vec3(0.3f, 0.3f, 1), glm::vec4(1, 0, 0, 1));
+		DrawText(environment, ("x = " + std::to_string(environment.InputMousePos.x) + ", y = " + std::to_string(environment.InputMousePos.y)), "CascadiaCode", glm::vec3(14, 440, 0), glm::vec3(0.3f, 0.3f, 1), glm::vec4(1, 0, 0, 1));
 
 		DrawFB(environment, environment.gameBuffer, "BufferShader");
 

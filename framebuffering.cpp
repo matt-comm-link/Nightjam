@@ -17,9 +17,9 @@ FrameBuffer::FrameBuffer(int width, int height, GLenum scaleMode, Mesh &square)
 	GLenum err;
 	while ((err = glGetError()) != GL_NO_ERROR)
 	{
-		cout << "ERROR::OPENGL:: Opengl errors going into the fb: " << err << endl;
-		cout << "WH: " << width << ", " << height << endl;
-		cout << "render texture index: " << texID << endl;
+		std::cout << "ERROR::OPENGL:: Opengl errors going into the fb: " << err << '\n';
+		std::cout << "WH: " << width << ", " << height << '\n';
+		std::cout << "render texture index: " << texID << '\n';
 	}
 	glGenTextures(1, &texID);
 	glBindTexture(GL_TEXTURE_2D, texID);
@@ -37,10 +37,10 @@ FrameBuffer::FrameBuffer(int width, int height, GLenum scaleMode, Mesh &square)
 	auto glerror = glGetError();
 	
 	if (fbostatus != GL_FRAMEBUFFER_COMPLETE)
-		cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete! " << fbostatus << " " << glerror << endl;
+		std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete! " << fbostatus << " " << glerror << '\n';
 	while ((err = glGetError()) != GL_NO_ERROR)
 	{
-		cout << "ERROR::OPENGL:: Opengl errors after the fb: " << err << " WH: " << width << ", " << height << endl;
+		std::cout << "ERROR::OPENGL:: Opengl errors after the fb: " << err << " WH: " << width << ", " << height << '\n';
 	}
 
 
@@ -72,7 +72,7 @@ void FrameBuffer::Resize(int width, int height)
 	auto fbostatus = glCheckFramebufferStatus(GL_FRAMEBUFFER);
 	auto glerror = glGetError();
 	if (fbostatus != GL_FRAMEBUFFER_COMPLETE)
-		cout << "RESIZE ERROR::FRAMEBUFFER:: Framebuffer is not complete! " << fbostatus << " " << glerror << endl;
+		std::cout << "RESIZE ERROR::FRAMEBUFFER:: Framebuffer is not complete! " << fbostatus << " " << glerror << '\n';
 
 
 }

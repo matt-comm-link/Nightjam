@@ -1,5 +1,11 @@
 #pragma once
 
+#ifndef DefEnivronment
+
+#define DefEnvironment "ENVIRONMENT"
+
+
+
 #include "mesh.h"
 #include "shader.h"
 #include <string>
@@ -11,23 +17,23 @@
 
 struct Environment {
 
-	string ApplicationPath;
+	std::string ApplicationPath;
 
 	//These are vectors of all loaded assets
 	//Loaded Graphics Assets 
 
 
-	vector<string> shaderNames;
-	vector<shader> shaders;
+	std::vector<std::string> shaderNames;
+	std::vector<shader> shaders;
 
-	vector<string> meshname;
-	vector<Mesh> meshes;
+	std::vector<std::string> meshname;
+	std::vector<Mesh> meshes;
 
-	vector<string> texname;
-	vector<Texture> textures;
+	std::vector<std::string> texname;
+	std::vector<Texture> textures;
 
-	vector<string> fontnames;
-	vector<map<char, Character>> fonts;
+	std::vector<std::string> fontnames;
+	std::vector<std::map<char, Character>> fonts;
 	shader FontShader;
 	Mesh FontMesh;
 
@@ -68,37 +74,49 @@ struct Environment {
 
 	//Loaded game assets
 
-	vector<string> effectNames;
-	vector<EffectData> effects;
+	std::vector<std::string> effectNames;
+	std::vector<EffectData> effects;
 
-	vector<string> weaponNames;
-	vector<WeaponData> weapons;
+	std::vector<std::string> weaponNames;
+	std::vector<WeaponData> weapons;
 
-	vector<string> defenceNames;
-	vector<DefenceData> defences;
+	std::vector<std::string> defenceNames;
+	std::vector<DefenceData> defences;
 
-	vector<string> enemyNames;
-	vector<EnemyData> enemies;
+	std::vector<std::string> enemyNames;
+	std::vector<ActorData> enemies;
 
-	vector<string> sceneNames;
-	vector<SceneData> scenes;
+	std::vector<std::string> sceneNames;
+	std::vector<SceneData> scenes;
 
-	vector<string> battleNames;
-	vector<BattleData> battles;
+	std::vector<std::string> UINames;
+	std::vector<UIData> UIs;
 
-	vector<string> conversationNames;
-	vector<vector<string>> conversations;
+	std::vector<std::string> battleNames;
+	std::vector<BattleData> battles;
+
+	std::vector<std::string> conversationNames;
+	std::vector<std::vector<std::string>> conversations;
+
+	std::vector<std::string> scriptableNames;
+	std::vector<GameConstruct> scriptableObjects;
 
 	//SCENE SCREEN
 	glm::vec3 PlayerPos;
 	SceneData CurrentScene;
 	PlayerData CurrentSave;
 
+
+	//tags currently in play
+	std::vector<SceneTag> currentTags;
+	//These ones don't get timed out
+	std::vector<SceneTag> indefiniteTags;
+
 	//BATTLE SCREEN
 	bool inBattle = false;
-	vector<EnemyData> currentFoes;
+	std::vector<ActorData> currentFoes;
 	//what effect is in play
-	string currentEffect[4]; //knight, ranger, wizard, you
+	std::string currentEffect[4]; //knight, ranger, wizard, you
 	//how long the effect has left
 	uint currentEffectTurns[4]; //knight, ranger, wizard, you
 	//current health (doesn't carry over between fights)
@@ -108,7 +126,7 @@ struct Environment {
 
 	//CONVERSATION SCREEN
 	bool inConversation = false;
-	vector<string> ConversationScript;
+	std::vector<std::string> ConversationScript;
 	uint ConversationPlace;
 
 	//CONSTANTS
@@ -141,15 +159,17 @@ struct Environment {
 	bool InputESC;
 	bool InputSpace;
 
-	Mesh& GetMesh(string n);
+	Mesh& GetMesh(std::string n);
 
-	Mesh& GetMeshInstance(string n);
+	Mesh& GetMeshInstance(std::string n);
 
-	Texture& GetTexture(string n);
+	Texture& GetTexture(std::string n);
 
-	Texture& GetTextureInstance(string n);
+	Texture& GetTextureInstance(std::string n);
 
-	shader& GetShader(string n);
+	shader& GetShader(std::string n);
 
-	map<char, Character>& GetFont(string n);
+	std::map<char, Character>& GetFont(std::string n);
 };
+
+#endif // !DefEnivronment
